@@ -59,3 +59,59 @@ def test_tweet_create_view(api_client, create_user):
     assert Tweet.objects.count() == 1
     assert Tweet.objects.first().text == 'Some New tweet for test'
     
+#adding new test cases
+def test_tweet_create_view(api_client, create_user):
+    user = create_user()
+    api_client.force_authenticate(user=user)
+
+    url = reverse('tweet_create')
+    data = {
+        'text': 'New tweet',
+        'photo': '',  # Add path to a valid image file if needed
+    }
+    response = api_client.post(url, data)
+
+    assert response.status_code == status.HTTP_302_FOUND
+    assert Tweet.objects.count() == 1
+    assert Tweet.objects.first().text == 'New tweet'
+
+def test_tweet_edit_view(api_client, create_user, create_tweet):
+    user = create_user()
+    tweet = create_tweet(text='Original tweet')
+    api_client.force_authenticate(user=user)
+
+    url = reverse('tweet_edit', kwargs={'tweet_id': tweet.id})
+    data = {
+        'text': 'Updated tweet',
+        'photo': tweet.photo,
+    }
+    response = api_client.post(url, data)
+
+    assert response.status_code == status.HTTP_302_FOUND
+    tweet.refresh_from_db()
+    assert tweet.text == 'Updated tweet'
+
+def test_tweet_delete_view(api_client, create_user, create_tweet):
+    user = create_user()
+    tweet = create_tweet(text='Tweet to delete')
+    api_client.force_authenticate(user=user)
+
+    url = reverse('tweet_delete', kwargs={'tweet_id': tweet.id})
+    response = api_client.post(url)
+
+    assert response.status_code == status.HTTP_302_FOUND
+    assert Tweet.objects.count() == 0
+
+def test_register_view(api_client):
+    url = reverse('register')
+    data = {
+        'username': 'newuser',
+        'email': 'newuser@example.com',
+        'password1': 'newpassword',
+        'password2': 'newpassword',
+    }
+    response = api_client.post(url, data)
+
+    assert response.status_code == status.HTTP_302_FOUND
+    assert User.objects.count() == 1
+    assert User.objects.first().username == 'newuser'
