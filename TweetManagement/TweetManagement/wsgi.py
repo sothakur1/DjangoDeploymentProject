@@ -11,6 +11,11 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TweetManagement.settings')
+settings_module = 'TweetManagement.deployment' if 'WEBSITE_HOSTNAME' in os.environ else 'TweetManagement.settings'
+#above and below is added line
+
+#os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TweetManagement.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_module)
 
 application = get_wsgi_application()
+

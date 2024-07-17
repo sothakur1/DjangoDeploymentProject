@@ -9,6 +9,12 @@ Code and tweet
 
 <a class="btn btn-primary mb-4" href="{% url 'tweet_create' %}" > Create a Tweet</a>
 
+<!-- Search Form -->
+<form method="GET" action="" class="d-flex mb-4">
+  {{ search_form.query }}
+  <button type="submit" class="btn btn-outline-success">Search</button>
+</form>
+
 <div class="container row gap-3">
     {% for tweet in tweets %}
     <div class="card" style="width: 18rem;">
@@ -18,13 +24,12 @@ Code and tweet
           <p class="card-text">{{tweet.text}}</p>
 
           {% if tweet.user == user %}
-          <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-primary">Edit</a>
-          <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger">Delete</a>
           {% endif %}
         </div>
       </div>
     {% endfor %}
 
 </div>
-
 {% endblock %}

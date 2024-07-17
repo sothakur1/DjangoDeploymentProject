@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Tweet
-from .forms import TweetForm, UserRegistrationForm
+from .forms import TweetForm, UserRegistrationForm, TweetSearchForm
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -10,8 +10,19 @@ def index(request):
 
 #no need to protect as per user
 def tweet_list(request):
+    search_form = TweetSearchForm(request.GET or None)
+
     tweets = Tweet.objects.all().order_by('-created_at')
-    return render(request,'tweet_list.html', {'tweets':tweets} )
+    if search_form.is_valid():
+        query = search_form.cleaned_data.get('query', '')
+        if query:
+            tweets = tweets.filter(text__icontains=query)
+
+    context = {
+        'tweets': tweets,
+        'search_form': search_form,
+    }
+    return render(request,'tweet_list.html', context )
 
 #need to protect using decorater 
 @login_required

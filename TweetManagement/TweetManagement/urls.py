@@ -22,8 +22,11 @@ from django.conf.urls.static import static
 from django.contrib.auth.urls import views as auth_views
 from django.contrib.auth.urls import views as auth_views
 
+#from . import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #path('', views.tweet_list, name='index'),  # Add the index view
     path('tweet/', include('tweet.urls')),
     path('account/', include('django.contrib.auth.urls')), #account thing is in built from django.contrib.auth.urls
          
