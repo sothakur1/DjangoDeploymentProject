@@ -2,6 +2,8 @@ import os
 from .settings import *
 from .settings import BASE_DIR
 
+#below took from setting.py
+SECRET_KEY = os.environ['SECRET']       #it will refer the secret key balu in the azure portal 
 ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']]
 CSRF_TRUSTED_ORIGINS = ['https://'+ os.environ['WEBSITE_HOSTNAME']]
 
