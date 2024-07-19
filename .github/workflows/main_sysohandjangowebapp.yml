@@ -30,6 +30,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Create static directories
+        run: |
+          mkdir -p TweetManagement/static
+          mkdir -p TweetManagement/staticfiles
+
       - name: Run collectstatic
         working-directory: ./TweetManagement
         run: python manage.py collectstatic --noinput       
